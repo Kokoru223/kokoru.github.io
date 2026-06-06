@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李子昂 - 个人主页</title>
+    <style>
+        :root {
+            --primary: #1a3a5c;
+            --primary-light: #2c5f8a;
+            --accent: #c9a96e;
+            --accent-light: #e8d5b0;
+            --bg: #f8f7f4;
+            --bg-white: #ffffff;
+            --text: #2d2d2d;
+            --text-light: #5a5a5a;
+            --text-lighter: #888888;
+            --border: #e8e5df;
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.10);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-cn: "Noto Serif SC", "Source Han Serif SC", "SimSun", "STSong", serif;
+            --font-sans: "Inter", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- NAV ---- */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .nav.scrolled {
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .nav-logo {
+            font-family: var(--font-cn);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.25rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(26, 58, 92, 0.05);
+        }
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary);
+            padding: 0.25rem;
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            padding: 140px 2rem 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            min-height: 85vh;
+        }
+        .hero-avatar-wrap {
+            flex-shrink: 0;
+            position: relative;
+        }
+        .hero-avatar {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-white);
+            box-shadow: 0 8px 40px rgba(26, 58, 92, 0.15);
+            position: relative;
+            z-index: 2;
+        }
+        .hero-avatar-ring {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-light);
+            z-index: 1;
+        }
+        .hero-info {
+            flex: 1;
+        }
+        .hero-tag {
+            display: inline-block;
+            background: var(--accent-light);
+            color: #6b4f1a;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .hero-name {
+            font-family: var(--font-cn);
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.06em;
+        }
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            font-weight: 500;
+        }
+        .hero-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.5rem;
+            margin-bottom: 1.8rem;
+        }
+        .hero-detail span {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .hero-detail .icon {
+            width: 18px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+        .hero-research-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.8rem;
+        }
+        .research-tag {
+            background: rgba(26, 58, 92, 0.06);
+            color: var(--primary-light);
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            border: 1px solid rgba(26, 58, 92, 0.1);
+        }
+        .hero-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.6rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-sans);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 58, 92, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* ---- SECTIONS ---- */
+        .section {
+            padding: 80px 2rem;
+        }
+        .section-alt {
+            background: var(--bg-white);
+        }
+        .section-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-family: var(--font-cn);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.04em;
+        }
+        .section-line {
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ---- EDUCATION ---- */
+        .edu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .edu-card {
+            display: flex;
+            gap: 1.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem 2rem;
+            transition: var(--transition);
+            align-items: flex-start;
+        }
+        .edu-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: var(--accent-light);
+        }
+        .edu-icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(26, 58, 92, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+        .edu-year {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.06em;
+            margin-bottom: 0.2rem;
+        }
+        .edu-degree {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+        .edu-school {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+        .edu-school span {
+            color: var(--text-lighter);
+        }
+
+        /* ---- PUBLICATIONS ---- */
+        .pub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .pub-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.8rem;
+            transition: var(--transition);
+        }
+        .pub-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-light);
+        }
+        .pub-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.7rem;
+            border-radius: 12px;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        .pub-badge-first {
+            background: #e8f0f8;
+            color: #1a3a5c;
+        }
+        .pub-badge-cofirst {
+            background: #fdf2e0;
+            color: #8b6914;
+        }
+        .pub-badge-other {
+            background: #f0f0f0;
+            color: #666;
+        }
+        .pub-title {
+            font-weight: 700;
+            color: var(--text);
+            margin: 0.4rem 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .pub-authors {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+        .pub-authors strong {
+            color: var(--primary);
+        }
+        .pub-journal {
+            font-size: 0.85rem;
+            color: var(--text-lighter);
+            font-style: italic;
+        }
+        .pub-subtitle {
+            font-family: var(--font-cn);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2rem 0 1rem;
+            padding-left: 0.8rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* ---- PROJECTS ---- */
+        .funding-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.2rem;
+        }
+        .funding-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.8rem;
+            transition: var(--transition);
+        }
+        .funding-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        .funding-level {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+        .funding-title {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .funding-info {
+            font-size: 0.8rem;
+            color: var(--text-lighter);
+        }
+
+        /* ---- AWARDS ---- */
+        .award-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .award-item {
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+        }
+        .award-year {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.85rem;
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+        .award-desc {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .award-desc span {
+            color: var(--text-lighter);
+        }
+
+        /* ---- CONFERENCE ---- */
+        .conf-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.8rem;
+            transition: var(--transition);
+        }
+        .conf-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-light);
+        }
+        .conf-date {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+        .conf-name {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .conf-detail {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* ---- SKILLS ---- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.2rem;
+        }
+        .skill-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .skill-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+        .skill-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+        .skill-desc {
+            font-size: 0.85rem;
+            color: var(--text-lighter);
+            line-height: 1.5;
+        }
+
+        /* ---- SELF-EVAL ---- */
+        .eval-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: #fff;
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .eval-card::before {
+            content: '\201C';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 8rem;
+            font-family: var(--font-cn);
+            color: rgba(255, 255, 255, 0.06);
+            line-height: 1;
+        }
+        .eval-text {
+            font-family: var(--font-cn);
+            font-size: 1.2rem;
+            line-height: 1.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            background: var(--primary);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 2.5rem 2rem;
+            font-size: 0.85rem;
+        }
+        .footer strong {
+            color: #fff;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 120px 1.5rem 60px;
+                gap: 2rem;
+                min-height: auto;
+            }
+            .hero-avatar {
+                width: 180px;
+                height: 180px;
+            }
+            .hero-avatar-ring {
+                inset: -8px;
+            }
+            .hero-name {
+                font-size: 2.4rem;
+            }
+            .hero-detail {
+                justify-content: center;
+            }
+            .hero-research-tags {
+                justify-content: center;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .section {
+                padding: 50px 1.5rem;
+            }
+            .section-title {
+                font-size: 1.7rem;
+            }
+            .funding-list {
+                grid-template-columns: 1fr;
+            }
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-toggle {
+                display: block;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-name {
+                font-size: 2rem;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            .edu-card {
+                flex-direction: column;
+                gap: 0.6rem;
+                padding: 1.2rem;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#home" class="nav-logo">李⼦昂</a>
+            <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#education">教育背景</a></li>
+                <li><a href="#publications">学术论文</a></li>
+                <li><a href="#projects">科研项目</a></li>
+                <li><a href="#awards">荣誉奖项</a></li>
+                <li><a href="#skills">专业技能</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-avatar-wrap">
+            <div class="hero-avatar-ring"></div>
+            <img src="证件照.png" alt="李子昂" class="hero-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22240%22 height=%22240%22><rect fill=%22%23e8e5df%22 width=%22240%22 height=%22240%22 rx=%22120%22/><text x=%22120%22 y=%22130%22 text-anchor=%22middle%22 font-size=%2260%22 fill=%22%23999%22>李</text></svg>'">
+        </div>
+        <div class="hero-info">
+            <div class="hero-tag">青年学者 · 心理学博士</div>
+            <h1 class="hero-name">李子昂</h1>
+            <p class="hero-subtitle">安阳师范学院 · 饮食心理学、人格心理学、认知神经科学</p>
+            <div class="hero-detail">
+                <span>📍 河南安阳</span>
+                <span>🎓 西南大学 教育学博士</span>
+                <span>📧 liziang95@qq.com</span>
+            </div>
+            <div class="hero-research-tags">
+                <span class="research-tag">饮食心理学</span>
+                <span class="research-tag">人格心理学</span>
+                <span class="research-tag">认知神经科学</span>
+                <span class="research-tag">眼动研究</span>
+            </div>
+            <div class="hero-actions">
+                <a href="#publications" class="btn btn-primary">📄 学术论文</a>
+                <a href="#education" class="btn btn-outline">📖 了解更多</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="section section-alt" id="education">
+        <div class="section-inner">
+            <div class="section-label">Education</div>
+            <h2 class="section-title">教育背景</h2>
+            <div class="section-line"></div>
+            <div class="edu-list">
+                <div class="edu-card">
+                    <div class="edu-icon">🎓</div>
+                    <div>
+                        <div class="edu-year">2021 — 2025</div>
+                        <div class="edu-degree">教育学博士 · 基础心理学</div>
+                        <div class="edu-school">西南大学 <span>| 导师：陈红 教授</span></div>
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="edu-icon">📚</div>
+                    <div>
+                        <div class="edu-year">2017 — 2020</div>
+                        <div class="edu-degree">理学硕士 · 基础心理学</div>
+                        <div class="edu-school">陕西师范大学 <span>| 导师：马国杰 副教授</span></div>
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="edu-icon">📖</div>
+                    <div>
+                        <div class="edu-year">2013 — 2017</div>
+                        <div class="edu-degree">理学学士 · 应用心理学（GPA: 3.6）</div>
+                        <div class="edu-school">郑州大学</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section class="section" id="publications">
+        <div class="section-inner">
+            <div class="section-label">Publications</div>
+            <h2 class="section-title">期刊论文</h2>
+            <div class="section-line"></div>
+            <p class="pub-subtitle">第一作者</p>
+            <div class="pub-list">
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-first">一作</span>
+                    <span class="pub-badge pub-badge-first">中科院一区</span>
+                    <p class="pub-title">A systematic review of the relationship between taste and personality traits: Phenomena and possible mechanisms</p>
+                    <p class="pub-authors"><strong>Li, Z.</strong>, Luo, Y., Liu, W., & Chen, H. (2025)</p>
+                    <p class="pub-journal">Appetite, 207</p>
+                </div>
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-first">一作</span>
+                    <span class="pub-badge pub-badge-other">中科院三区</span>
+                    <p class="pub-title">Is Being Male a Marker of Aggression? Evidence for the Decoupling of Sex and Gender Role Orientation</p>
+                    <p class="pub-authors"><strong>Li, Z.</strong>, Liu, Y., Liu, W., & Chen, H. (2024)</p>
+                    <p class="pub-journal">Brain Sciences, 14(12), 1176</p>
+                </div>
+            </div>
+            <p class="pub-subtitle">合作论文</p>
+            <div class="pub-list">
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-cofirst">共同一作</span>
+                    <span class="pub-badge pub-badge-other">中科院二区</span>
+                    <p class="pub-title">A holistic view of gender traits and personality traits predict human health</p>
+                    <p class="pub-authors">Liu, W., <strong>Li, Z.</strong>, Ding, C., Wang, X., & Chen, H. (2024)</p>
+                    <p class="pub-journal">Personality and Individual Differences, 222, 112601</p>
+                </div>
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-cofirst">共同一作</span>
+                    <span class="pub-badge pub-badge-other">中科院三区</span>
+                    <p class="pub-title">Advantage of graphical nutrition facts label: Faster attention capture and improved healthiness judgement</p>
+                    <p class="pub-authors">Gao, Z., <strong>Li, Z.</strong>, Zhuang, X., & Ma, G. (2022)</p>
+                    <p class="pub-journal">Ergonomics</p>
+                </div>
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-other">三作</span>
+                    <span class="pub-badge pub-badge-other">中科院三区</span>
+                    <p class="pub-title">Relationships between grey matter volume in the bilateral superior frontal gyrus and reactive aggression varied by level of traditional masculinity</p>
+                    <p class="pub-authors">Liu, W., Ding, C., <strong>Li, Z.</strong>, & Chen, H. (2024)</p>
+                    <p class="pub-journal">Brain Sciences, 14(6), 605</p>
+                </div>
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-other">合作</span>
+                    <p class="pub-title">Association of loneliness and grey matter volume in the dorsolateral prefrontal cortex: the mediating role of interpersonal self-support traits</p>
+                    <p class="pub-authors">Zheng, S., Chen, X., Liu, W., <strong>Li, Z.</strong>, Xiao, M., Liu, Y., & Chen, H. (2023)</p>
+                    <p class="pub-journal">Brain Imaging and Behavior, 17(5), 481-493</p>
+                </div>
+                <div class="pub-card">
+                    <span class="pub-badge pub-badge-other">导师一作</span>
+                    <span class="pub-badge pub-badge-other">中科院三区</span>
+                    <p class="pub-title">The modulation of eye movement control by word length in reading Chinese</p>
+                    <p class="pub-authors">Ma G., <strong>Li Z.</strong>, Xu F., et al. (2018)</p>
+                    <p class="pub-journal">Quarterly Journal of Experimental Psychology, 72(7):1620-1631</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section section-alt" id="projects">
+        <div class="section-inner">
+            <div class="section-label">Research Projects</div>
+            <h2 class="section-title">参与基金项目</h2>
+            <div class="section-line"></div>
+            <div class="funding-list">
+                <div class="funding-card">
+                    <div class="funding-level">国家自然科学基金 · 面上项目</div>
+                    <p class="funding-title">基于双系统模型的儿童超重/肥胖的认知神经机制</p>
+                    <p class="funding-info">编号：32271087 | 主持人：陈红教授</p>
+                </div>
+                <div class="funding-card">
+                    <div class="funding-level">国家社会科学基金 · 重大项目</div>
+                    <p class="funding-title">新时代中国社区心理学的理论建构与实践路径研究</p>
+                    <p class="funding-info">编号：22&ZD184 | 主持人：陈红教授</p>
+                </div>
+                <div class="funding-card">
+                    <div class="funding-level">中央高校自由探索项目</div>
+                    <p class="funding-title">驾驶员的注视模式与变化视盲</p>
+                    <p class="funding-info">编号：GK201803099 | 主持人：马国杰副教授</p>
+                </div>
+                <div class="funding-card">
+                    <div class="funding-level">中央高校自由探索项目</div>
+                    <p class="funding-title">驾驶员对行人过街意图的识别及影响因素</p>
+                    <p class="funding-info">编号：GK201803098 | 主持人：庄想灵教授</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONFERENCE -->
+    <section class="section" id="conference">
+        <div class="section-inner">
+            <div class="section-label">Conference</div>
+            <h2 class="section-title">会议报告</h2>
+            <div class="section-line"></div>
+            <div class="conf-card">
+                <div class="conf-date">2019年10月</div>
+                <div class="conf-name">第二十二届全国心理学学术会议 · 杭州</div>
+                <p class="conf-detail">口头报告：可视化食品营养成分表对消费者健康判断影响的眼动研究</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AWARDS -->
+    <section class="section section-alt" id="awards">
+        <div class="section-inner">
+            <div class="section-label">Honors & Awards</div>
+            <h2 class="section-title">奖项荣誉</h2>
+            <div class="section-line"></div>
+            <div class="award-list">
+                <div class="award-item">
+                    <span class="award-year">2021 — 2025</span>
+                    <span class="award-desc">研究生学业奖学金 <span>| 西南大学</span></span>
+                </div>
+                <div class="award-item">
+                    <span class="award-year">2019</span>
+                    <span class="award-desc">第五届"互联网+"大学生创新创业大赛优秀奖 <span>| 陕西师范大学</span></span>
+                </div>
+                <div class="award-item">
+                    <span class="award-year">2017 — 2019</span>
+                    <span class="award-desc">硕士积学奖学金 <span>| 陕西师范大学</span></span>
+                </div>
+                <div class="award-item">
+                    <span class="award-year">2014 — 2015</span>
+                    <span class="award-desc">国家励志奖学金、校级三好学生 <span>| 郑州大学</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+        <div class="section-inner">
+            <div class="section-label">Skills</div>
+            <h2 class="section-title">专业技能与实践</h2>
+            <div class="section-line"></div>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">🗣️</div>
+                    <div class="skill-name">英语能力</div>
+                    <div class="skill-desc">CET-6（519分）<br>英文学术论文写作与交流</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🧑‍🏫</div>
+                    <div class="skill-name">教师资格</div>
+                    <div class="skill-desc">高中心理健康<br>高中地理</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">👁️</div>
+                    <div class="skill-name">实验设备</div>
+                    <div class="skill-desc">Eyelink 眼动设备<br>心理学量表及仪器</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📊</div>
+                    <div class="skill-name">数据分析</div>
+                    <div class="skill-desc">SPSS 等统计软件<br>实验设计与数据处理</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎯</div>
+                    <div class="skill-name">教学实践</div>
+                    <div class="skill-desc">中学心理健康教师<br>高考冲刺班助理教师</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🤝</div>
+                    <div class="skill-name">学生工作</div>
+                    <div class="skill-desc">班长、学习委员<br>团队协作与组织管理</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SELF EVALUATION -->
+    <section class="section section-alt" id="evaluation">
+        <div class="section-inner">
+            <div class="section-label">About Me</div>
+            <h2 class="section-title">自我评价</h2>
+            <div class="section-line"></div>
+            <div class="eval-card">
+                <p class="eval-text">政治立场坚定，科研能力较强，学习成绩优良，团队合作能力强。<br>对教学工作具有极高的热情。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2026 <strong>李子昂</strong> · 安阳师范学院 · liziang95@qq.com</p>
+    </footer>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 60) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // Mobile nav toggle
+        const toggle = document.getElementById('navToggle');
+        const links = document.getElementById('navLinks');
+        toggle.addEventListener('click', () => links.classList.toggle('open'));
+        links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+            links.classList.remove('open');
+        }));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.edu-card, .pub-card, .funding-card, .conf-card, .skill-card, .award-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
